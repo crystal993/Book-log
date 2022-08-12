@@ -9,10 +9,6 @@ const middlewares = [thunk];
 
 // 리듀서 통합
 const rootReducer = combineReducers({
-  post,
-  posts,
-  comment,
-  comments,
   devTools: false,
 });
 
