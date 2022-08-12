@@ -1,7 +1,7 @@
 import React from "react";
 
-function DetailInfo() {
-  return <div>DetailInfo</div>;
+function DetailInfo({ user }) {
+  return <>닉네임 : {user?.nickname}</>;
 }
 
 export default DetailInfo;
