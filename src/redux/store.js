@@ -1,10 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import thunk from "redux-thunk";
-import comment from "./modules/commentSlice";
-import comments from "./modules/commentsSlice";
-import post from "./modules/postSlice";
-import posts from "./modules/postsSlice";
 const middlewares = [thunk];
 
 // 리듀서 통합
