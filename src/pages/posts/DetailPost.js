@@ -4,6 +4,7 @@ import AddForm from "../../components/comments/AddForm";
 import Comments from "../../components/comments/Comments";
 import Layout from "../../components/common/Layout";
 import DetailInfo from "../../components/posts/DetailInfo";
+import Header from "../../components/common/Header";
 
 function DetailPost() {
   const [user, setUser] = useState();
@@ -25,6 +26,7 @@ function DetailPost() {
   }, []);
   return (
     <Layout>
+      <Header />
       <DetailInfo user={user} />
       <AddForm user={user} />
       <Comments />
