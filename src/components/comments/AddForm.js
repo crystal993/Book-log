@@ -3,7 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import useInput from "../hooks/useInput";
 
-function CommentForm({ user }) {
+function AddForm({ user }) {
   const [comment, setComment, commentHandler] = useInput();
 
   const onSubmit = () => {
@@ -35,4 +35,4 @@ const StyledContainer = styled.div`
   justify-content: center;
 `;
 
-export default CommentForm;
+export default AddForm;
