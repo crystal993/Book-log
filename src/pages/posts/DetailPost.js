@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import AddComment from "../../components/comments/AddComment";
+import CommentForm from "../../components/comments/CommentForm";
 import CommentList from "../../components/comments/CommentList";
 import Layout from "../../components/common/Layout";
 import DetailInfo from "../../components/posts/DetailInfo";
@@ -26,7 +26,7 @@ function DetailPost() {
   return (
     <Layout>
       <DetailInfo user={user} />
-      <AddComment user={user} />
+      <CommentForm user={user} />
       <CommentList />
     </Layout>
   );
