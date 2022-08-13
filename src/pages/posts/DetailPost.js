@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import CommentForm from "../../components/comments/CommentForm";
-import CommentList from "../../components/comments/CommentList";
+import Comments from "../../components/comments/Comments";
 import Layout from "../../components/common/Layout";
 import DetailInfo from "../../components/posts/DetailInfo";
 
@@ -27,7 +27,7 @@ function DetailPost() {
     <Layout>
       <DetailInfo user={user} />
       <CommentForm user={user} />
-      <CommentList />
+      <Comments />
     </Layout>
   );
 }
