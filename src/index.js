@@ -2,7 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import { lightTheme } from "./styles/Theme";
 import { ThemeProvider } from "styled-components";
+import "./styles/fonts.css";
 // import { Provider } from "react";
 import store from "./redux/store";
 //라우팅
@@ -12,9 +14,11 @@ import reportWebVitals from "./reportWebVitals";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <Provider store={store}>
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <ThemeProvider theme={lightTheme}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </ThemeProvider>
   // </Provider>
 );
 
