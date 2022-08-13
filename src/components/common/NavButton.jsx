@@ -18,16 +18,17 @@ const Icon = styled(FontAwesomeIcon)`
 `;
 
 const Btn = styled.button`
-  padding: 10px 20px;
-  margin: 5px;
-  color: #ffffff;
+  padding: 10px 15px;
+  margin: 10px;
+  color: ${(props) => props.theme.headerColor};
   border-radius: ${(props) => props.theme.buttonRadius};
   transition: ${(props) => props.theme.transition};
   border: none;
-  background-color: ${(props) => props.theme.headerColor};
+  background-color: #ffffff;
+  box-shadow: inset 0px 0px 4px 0px #5d5fef;
   &:hover {
     cursor: pointer;
-    color: #ffffff;
+    color: ${(props) => props.theme.headerColor};
   }
 `;
 

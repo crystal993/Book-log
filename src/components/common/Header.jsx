@@ -22,7 +22,12 @@ function Header() {
     <>
       <NavBar>
         <NavItem>
-          <Button icon={faHome} />
+          <Button
+            icon={faHome}
+            onClick={() => {
+              onClickHandler("/");
+            }}
+          />
         </NavItem>
         <Container>
           {!isLogin && (
@@ -72,7 +77,8 @@ function Header() {
 }
 
 const NavBar = styled.div`
-  height: 50px;
+  width: 100%;
+  height: 60px;
   background-color: ${({ theme }) => theme.headerColor};
   display: flex;
   flex-direction: row;
@@ -90,7 +96,7 @@ const Container = styled.div`
   flex-direction: row;
   align-content: center;
   align-items: center;
-  margin-right: 50px;
+  margin-right: 110px;
 `;
 
 export default Header;

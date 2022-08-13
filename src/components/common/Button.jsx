@@ -19,15 +19,16 @@ const Icon = styled(FontAwesomeIcon)`
 
 const Btn = styled.button`
   padding: 10px 20px;
+  border-radius: 20px;
   margin: 5px;
   color: #ffffff;
   border-radius: ${(props) => props.theme.buttonRadius};
   transition: ${(props) => props.theme.transition};
   border: none;
-  background-color: ${(props) => props.theme.headerColor};
+  background-color: #ffffff;
   &:hover {
     cursor: pointer;
-    color: #ffffff;
+    color: ${(props) => props.theme.headerColor};
   }
 `;
 
