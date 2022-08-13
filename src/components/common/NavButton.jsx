@@ -15,6 +15,7 @@ const Wrapper = styled.div``;
 const Icon = styled(FontAwesomeIcon)`
   color: #ffffff;
   padding: 10px 50px;
+  cursor: pointer;
 `;
 
 const Btn = styled.button`

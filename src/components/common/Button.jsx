@@ -25,9 +25,11 @@ const Btn = styled.button`
   border-radius: ${(props) => props.theme.buttonRadius};
   transition: ${(props) => props.theme.transition};
   border: none;
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.headerColor};
   &:hover {
     cursor: pointer;
+    background-color: #ffffff;
+    box-shadow: inset 0px 0px 4px 0px #b6b7b9;
     color: ${(props) => props.theme.headerColor};
   }
 `;
