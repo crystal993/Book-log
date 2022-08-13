@@ -9,6 +9,9 @@ const Layouts = styled.div`
   width: 100%;
   min-width: 800px;
   margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
 `;
 
 export default Layout;
