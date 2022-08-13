@@ -1,11 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faUser } from "@fortawesome/free-solid-svg-icons";
 
 function Card({ post }) {
+  const navigate = useNavigate();
+  const onClickHandler = (path) => {
+    navigate(path);
+  };
   return (
-    <CardView>
+    <CardView
+      onClick={() => {
+        onClickHandler(`/detail/${post.postid}`);
+      }}
+    >
       <Image src="http://designwith.co.kr/wp-content/uploads/2021/03/1-6.png" />
       <CardContents>
         <Title>
@@ -20,7 +29,10 @@ function Card({ post }) {
         </Content>
         <Hr noshade />
         <CardFooter>
-          <Writer>by {post.nickname}</Writer>
+          <WriterFooter>
+            <User icon={faUser} />
+            <Writer>by {post.nickname}</Writer>
+          </WriterFooter>
           <Icon icon={faHeart} />
         </CardFooter>
       </CardContents>
@@ -75,6 +87,13 @@ const CardFooter = styled.div`
   align-items: center;
 `;
 
+const WriterFooter = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+`;
+
 const Writer = styled.p`
   font-size: 13px;
   color: #a0a0a0;
@@ -86,6 +105,14 @@ const Hr = styled.hr`
 
 const Icon = styled(FontAwesomeIcon)`
   color: #5d5fef;
+`;
+
+const User = styled(FontAwesomeIcon)`
+  color: #dbdbdf;
+  background-color: #747477;
+  border: 1px solid #747477;
+  border-radius: 50px;
+  padding: 2.5px;
 `;
 
 export default Card;
