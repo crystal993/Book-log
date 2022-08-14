@@ -6,6 +6,7 @@ import styled from "styled-components";
 function CardList() {
   const [postList, setPostList] = useState([]);
 
+  // api/post
   useEffect(() => {
     axios({
       method: "get",

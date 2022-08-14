@@ -114,11 +114,12 @@ const ButtonBox = styled.div`
   align-items: center;
   justify-content: space-between;
   align-items: flex-start;
+  margin-right: -20px;
 `;
 
 const ErrorMsg = styled.div`
   width: 70%;
-  color: ${(props) => props.theme.errorTextColor}; ;
+  color: ${(props) => props.theme.errorTextColor};
 `;
 
 export default AddForm;
