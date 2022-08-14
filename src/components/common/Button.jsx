@@ -25,12 +25,25 @@ const Btn = styled.button`
   border-radius: ${(props) => props.theme.buttonRadius};
   transition: ${(props) => props.theme.transition};
   border: none;
-  background-color: ${(props) => props.theme.headerColor};
+  background-color: ${(props) => props.theme.mainColor};
   &:hover {
     cursor: pointer;
     background-color: #ffffff;
     box-shadow: inset 0px 0px 4px 0px #b6b7b9;
-    color: ${(props) => props.theme.headerColor};
+    color: ${(props) => props.theme.mainColor};
+  }
+  &[disabled] {
+    background: white;
+    cursor: revert;
+    transform: revert;
+  }
+
+  &[aria-current] {
+    background: black;
+    font-weight: bold;
+    color: white;
+    cursor: revert;
+    transform: revert;
   }
 `;
 

@@ -16,3 +16,8 @@ export const emailCheck = (email) => {
 
   return _reg.test(email);
 };
+
+export const commentCheck = (comment) => {
+  let _reg = /.{5,100}/;
+  return _reg.test(comment);
+};

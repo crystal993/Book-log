@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-
+import comment from "./modules/commentSlice";
 import thunk from "redux-thunk";
+import logger from "redux-logger";
 const middlewares = [thunk];
 
 // 리듀서 통합
 const rootReducer = combineReducers({
+  comment,
   devTools: false,
 });
 
@@ -12,7 +14,7 @@ const rootReducer = combineReducers({
 const store = configureStore({
   reducer: rootReducer,
 
-  middleware: [...middlewares],
+  middleware: [...middlewares, logger],
 });
 
 export default store;
