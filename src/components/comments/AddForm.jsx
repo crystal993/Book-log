@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import { __addComment } from "../../redux/modules/commentSlice";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import useInput from "../hooks/useInput";
 import Button from "../common/Button";
-import { commentCheck } from "../../shared/regex";
 
-function AddForm({ user }) {
+function AddForm({ post }) {
+  const { id } = useParams(); //postId
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -17,16 +20,11 @@ function AddForm({ user }) {
     mode: "onChange",
   });
 
+  // const postId = post?.postid;
+
   const onSubmitHandler = (data, e) => {
     e.preventDefault();
-    axios({
-      method: "post",
-      url: `http://localhost:5002/add_comments`,
-      data: {
-        nickname: user.nickname,
-        comment: data.comment,
-      },
-    });
+    dispatch(__addComment({ nickname: post.nickname, comment: data.comment }));
     reset();
   };
 
