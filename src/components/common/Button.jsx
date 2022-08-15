@@ -2,22 +2,26 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 
-function Button({ content, icon, size, onClick }) {
+function Button({ content, icon, size, onClick, width }) {
   return (
-    <Wrapper onClick={onClick}>
+    <Wrapper onClick={onClick} width={width}>
       {icon && <Icon icon={icon} size={size} />}
       {content && <Btn>{content}</Btn>}
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  width: ${(width) => width};
+`;
 const Icon = styled(FontAwesomeIcon)`
-  color: #ffffff;
+  color: ${(props) => props.theme.mainColor};
   padding: 10px 20px;
 `;
 
 const Btn = styled.button`
+  width: fit-content;
+  text-align: center;
   padding: 10px 20px;
   border-radius: 20px;
   margin: 5px;
@@ -31,19 +35,6 @@ const Btn = styled.button`
     background-color: #ffffff;
     box-shadow: inset 0px 0px 4px 0px #b6b7b9;
     color: ${(props) => props.theme.mainColor};
-  }
-  &[disabled] {
-    background: white;
-    cursor: revert;
-    transform: revert;
-  }
-
-  &[aria-current] {
-    background: black;
-    font-weight: bold;
-    color: white;
-    cursor: revert;
-    transform: revert;
   }
 `;
 
