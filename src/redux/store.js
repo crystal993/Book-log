@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import comment from "./modules/commentSlice";
+import user from "./modules/userSlice";
 import thunk from "redux-thunk";
 import logger from "redux-logger";
 const middlewares = [thunk];
@@ -7,6 +8,7 @@ const middlewares = [thunk];
 // 리듀서 통합
 const rootReducer = combineReducers({
   comment,
+  user,
   devTools: false,
 });
 

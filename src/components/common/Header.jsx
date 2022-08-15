@@ -1,11 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
-import styled from "styled-components";
+import styled, { CSSprop } from "styled-components";
 import Button from "./NavButton";
+import { logout } from "../../redux/modules/userSlice";
 
-function Header() {
+function Header(color) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isLogin = useSelector((state) => state.user.isLogin);
 
   const onClickHandler = (path) => {
     navigate(path);
@@ -13,10 +17,10 @@ function Header() {
 
   const logoutHandler = () => {
     console.log("로그아웃!");
+    dispatch(logout());
+    localStorage.removeItem("AccessToken");
+    localStorage.removeItem("RefreshToken");
   };
-
-  const isLogin = false;
-  //TODO : 로그아웃 처리
 
   return (
     <>
@@ -44,7 +48,7 @@ function Header() {
                 <Button
                   content="Sign up"
                   onClick={() => {
-                    logoutHandler("/signup");
+                    onClickHandler("/signup");
                   }}
                 />
               </NavItem>{" "}
@@ -64,7 +68,7 @@ function Header() {
                 <Button
                   content="Logout"
                   onClick={() => {
-                    onClickHandler("/logout");
+                    logoutHandler("/logout");
                   }}
                 />
               </NavItem>
@@ -79,7 +83,7 @@ function Header() {
 const NavBar = styled.div`
   width: 100%;
   height: 60px;
-  background-color: ${({ theme }) => theme.headerColor};
+  background-color: ${(props) => props.theme.headerColor};
   display: flex;
   flex-direction: row;
   align-content: center;
