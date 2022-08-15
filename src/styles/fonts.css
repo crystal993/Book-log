@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans:wght@300;400;500&display=swap");
 
-body, textarea {
+body, textarea, input[type=file] {
   font-family: "Noto Sans", sans-serif;
   font-family: "Noto Sans KR", sans-serif;
 }
