@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../common/Button";
 import { nickCheck, passwordCheck, idCheck } from "../../shared/regex";
+import axios from "axios";
+import RESP from "../../server/response";
 
 function SignUpForm() {
   const { id } = useParams(); //postId
@@ -22,26 +24,64 @@ function SignUpForm() {
     mode: "onChange",
   });
 
-  const onSubmitHandler = async (formData) => {};
+  // TODO result를 data로 바꾸기
+  // TODO 시간되면 alert를 모달로 바꾸기
+  // api/user/signup
+  const onSubmitHandler = async (formData) => {
+    // const result = RESP.SIGN_UP_SUCCESS.result;
+    const { data } = await axios({
+      method: "post",
+      url: `http://localhost:5002/user_list`,
+      data: formData,
+    });
 
-  const onIdCheckHandler = async (formData) => {};
+    // TODO ~~닉네임님 환영합니다!
+    // alert(JSON.stringify(data));
+    navigate("/");
+  };
 
-  const onNickCheckHandler = async (formData) => {};
+  const onIdCheckHandler = async (formData) => {
+    // const { data } = await axios({
+    //   method: "get",
+    //   url: `url~~~~~/api/user/idCheck/${formData.account}`,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+    const result = RESP.ID_CHECK_SUCCESS.result;
+    if (result) {
+      alert("사용가능한 아이디 입니다.");
+    } else {
+      alert("존재하는 아이디 입니다.");
+    }
+    return result;
+  };
 
-  useEffect(() => {
-    setFocus("account");
-  }, []);
+  const onNickCheckHandler = async (formData, e) => {
+    // const { data } = await axios({
+    //   method: "get",
+    //   url: `url~~~~~/api/user/nicnameCheck/${formData.nickname}`,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+    const result = RESP.NICKNAME_CHECK_SUCCESS.result;
+    if (result) {
+      alert("사용가능한 닉네임 입니다.");
+    } else {
+      alert("존재하는 닉네임 입니다.");
+    }
+    return result;
+  };
+
+  // useEffect(() => {
+  //   setFocus("account");
+  // }, []);
 
   //TODO 회원가입 기능, 아이디 중복, 닉네임 중복체크
   return (
     <SignUpView>
-      <Form
-        onSubmit={handleSubmit(
-          onSubmitHandler,
-          onIdCheckHandler,
-          onNickCheckHandler
-        )}
-      >
+      <Form onSubmit={handleSubmit(onSubmitHandler)}>
         <Title>Sign Up</Title>
         <Container>
           <Label>ID</Label>
@@ -59,17 +99,23 @@ function SignUpForm() {
                         {"아이디는 숫자 또는 영문으로 6~12자 이내입니다."}
                       </ErrorMsg>
                     );
-                  } else {
-                    return (
-                      <CorrectMsg>
-                        {"조건에 일치하는 아이디 형식 입니다."}
-                      </CorrectMsg>
-                    );
                   }
+                  // else {
+                  //   return (
+                  //     <CorrectMsg>
+                  //       {"조건에 일치하는 아이디 형식 입니다."}
+                  //     </CorrectMsg>
+                  //   );
+                  // }
                 },
               })}
             />
-            <Button content={"check"} />
+            <Button
+              content={"check"}
+              onClick={() => {
+                onIdCheckHandler();
+              }}
+            />
           </InputBox>
           <ButtonBox>
             <MsgBox>
@@ -91,13 +137,14 @@ function SignUpForm() {
                         {"비밀번호는 숫자 또는 영문으로 6~12자 이내입니다."}
                       </ErrorMsg>
                     );
-                  } else {
-                    return (
-                      <CorrectMsg>
-                        {"조건에 일치하는 비밀번호 형식 입니다."}
-                      </CorrectMsg>
-                    );
                   }
+                  // else {
+                  //   return (
+                  //     <CorrectMsg>
+                  //       {"조건에 일치하는 비밀번호 형식 입니다."}
+                  //     </CorrectMsg>
+                  //   );
+                  // }
                 },
               })}
             />
@@ -128,12 +175,13 @@ function SignUpForm() {
                     return (
                       <ErrorMsg>{"비밀번호가 일치하지 않습니다."}</ErrorMsg>
                     );
-                  } else if (
-                    watch("password") === value &&
-                    value.length !== 0
-                  ) {
-                    return <CorrectMsg>{"비밀번호가 일치합니다"}</CorrectMsg>;
                   }
+                  // else if (
+                  //   watch("password") === value &&
+                  //   value.length !== 0
+                  // ) {
+                  //   return <CorrectMsg>{"비밀번호가 일치합니다"}</CorrectMsg>;
+                  // }
                 },
               })}
             />
@@ -162,18 +210,24 @@ function SignUpForm() {
                         }
                       </ErrorMsg>
                     );
-                  } else {
-                    return (
-                      <CorrectMsg>
-                        {"조건에 일치하는 닉네임 형식입니다."}
-                      </CorrectMsg>
-                    );
                   }
+                  // else {
+                  //   return (
+                  //     <CorrectMsg>
+                  //       {"조건에 일치하는 닉네임 형식입니다."}
+                  //     </CorrectMsg>
+                  //   );
+                  // }
                 },
               })}
             />
             {/* value: /^[a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]^{3,8}/i, */}
-            <Button content={"check"} />
+            <Button
+              content={"check"}
+              onClick={() => {
+                onNickCheckHandler();
+              }}
+            />
           </InputBox>
           <ButtonBox>
             <MsgBox>
@@ -199,7 +253,7 @@ function SignUpForm() {
             </MsgBox>
           </ButtonBox>
         </Container>
-        <Button type="submit" content={"회원가입"} />
+        <Button content={"회원가입"} type="submit" />
       </Form>
     </SignUpView>
   );
