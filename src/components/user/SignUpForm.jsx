@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
-import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../common/Button";
 import { nickCheck, passwordCheck, idCheck } from "../../shared/regex";
+import styled from "styled-components";
 import axios from "axios";
 import RESP from "../../server/response";
+import Modal from "../common/Modal";
+
+axios.defaults.withCredentials = true;
 
 function SignUpForm() {
+  const [openModal, setOpenModal] = useState(false);
+  const [msg, setMsg] = useState("");
   const { id } = useParams(); //postId
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,17 +29,71 @@ function SignUpForm() {
     mode: "onChange",
   });
 
+  const URI = {
+    BASE: process.env.REACT_APP_BASE_URI,
+  };
+
+  const inputRef = useRef(null);
+  const onChangeImg = async (e) => {
+    e.preventDefault();
+
+    if (e.target.files) {
+      const uploadFile = e.target.files[0];
+      console.log(uploadFile);
+      // const formData = new FormData();
+      // formData.append("file", uploadFile);
+
+      // await axios({
+      //   method: "post",
+      //   url: "/api/files/images",
+      //   data: formData,
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //   },
+      // });
+    }
+  };
+
   // TODO result를 data로 바꾸기
   // TODO 시간되면 alert를 모달로 바꾸기
-  // api/user/signup
-  const onSubmitHandler = async (formData) => {
+  // TODO axios 밑의 링크로 교체
+  // ${URI.BASE}/api/user/signup
+  // http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg
+  // http://localhost:5002/user_list
+  const onSubmitHandler = async (fdata) => {
+    console.log(fdata);
     // const result = RESP.SIGN_UP_SUCCESS.result;
+
+    const file = watch("imageUrl");
+    // const dto = {
+    //   dto: {
+    //     account: fdata.account,
+    //     password: fdata.password,
+    //     passwordCheck: fdata.passwordCheck,
+    //     nickname: fdata.nickname,
+    //   },
+    // };
+    // const fd = new FormData();
+    // fd.append("dto", dto.dto);
+    // fd.append("file", file[0]);
+    // for (var item of fd.entries()) {
+    //   console.log(item[0] + " : " + item[1]);
+    // }
+
+    const fd = new FormData();
+    fd.append("account", fdata.account);
+    fd.append("password", fdata.password);
+    fd.append("passwordCheck", fdata.passwordCheck);
+    fd.append("nickname", fdata.nickname);
+    fd.append("imageUrl", file[0]);
     const { data } = await axios({
       method: "post",
-      url: `http://localhost:5002/user_list`,
-      data: formData,
+      url: `http://15.164.218.57/api/user/signup`,
+      data: fd,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
-
     // TODO ~~닉네임님 환영합니다!
     // alert(JSON.stringify(data));
     navigate("/");
@@ -43,16 +102,17 @@ function SignUpForm() {
   const onIdCheckHandler = async (formData) => {
     // const { data } = await axios({
     //   method: "get",
-    //   url: `url~~~~~/api/user/idCheck/${formData.account}`,
+    //   url: `${URI.BASE}/api/user/idCheck/${formData.account}`,
     //   headers: {
     //     "Content-Type": "application/json",
     //   },
     // });
+
     const result = RESP.ID_CHECK_SUCCESS.result;
     if (result) {
-      alert("사용가능한 아이디 입니다.");
+      setMsg("사용가능한 아이디 입니다.");
     } else {
-      alert("존재하는 아이디 입니다.");
+      setMsg("존재하는 아이디 입니다.");
     }
     return result;
   };
@@ -60,16 +120,16 @@ function SignUpForm() {
   const onNickCheckHandler = async (formData, e) => {
     // const { data } = await axios({
     //   method: "get",
-    //   url: `url~~~~~/api/user/nicnameCheck/${formData.nickname}`,
+    //   url: `${URI.BASE}/api/user/nicnameCheck/${formData.nickname}`,
     //   headers: {
     //     "Content-Type": "application/json",
     //   },
     // });
     const result = RESP.NICKNAME_CHECK_SUCCESS.result;
     if (result) {
-      alert("사용가능한 닉네임 입니다.");
+      setMsg("사용가능한 닉네임 입니다.");
     } else {
-      alert("존재하는 닉네임 입니다.");
+      setMsg("존재하는 닉네임 입니다.");
     }
     return result;
   };
@@ -114,6 +174,8 @@ function SignUpForm() {
               content={"check"}
               onClick={() => {
                 onIdCheckHandler();
+                // console.log(result);
+                // setOpenModal(result);
               }}
             />
           </InputBox>
@@ -241,8 +303,10 @@ function SignUpForm() {
             <Input
               type="file"
               accept="image/*"
+              ref={inputRef}
+              onChange={onChangeImg}
               placeholder="이미지 파일"
-              {...register("imageUrl ", {})}
+              {...register("imageUrl", {})}
             />
           </InputBox>
           <ButtonBox>
@@ -255,6 +319,7 @@ function SignUpForm() {
         </Container>
         <Button content={"회원가입"} type="submit" />
       </Form>
+      {/* {openModal && <Modal msg={msg} />} */}
     </SignUpView>
   );
 }
