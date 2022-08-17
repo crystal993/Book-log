@@ -11,7 +11,10 @@ import { __getCommentsList } from "../../redux/modules/commentSlice";
 
 function DetailPost() {
   // const dispatch = useDispatch();
+  const posting = useSelector((state) => state.post2.post);
+  console.log(posting);
   const { id } = useParams(); //postId임
+  const post_id = id;
   const [post, setPost] = useState();
   // api/post/{postId}
   useEffect(() => {
@@ -23,7 +26,7 @@ function DetailPost() {
       },
     })
       .then((res) => {
-        // 데이터 서버에서 어떻게 내려주냐에 따라서 또 달라질듯
+        // TODO 데이터 서버에서 어떻게 내려주냐에 따라서 또 달라질듯
         setPost(res.data[0]);
       })
       .catch((err) => {});

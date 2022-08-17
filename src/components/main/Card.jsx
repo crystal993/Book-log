@@ -9,10 +9,11 @@ function Card({ post }) {
   const onClickHandler = (path) => {
     navigate(path);
   };
+  const post_id = post.postid;
   return (
     <CardView
       onClick={() => {
-        onClickHandler(`/detail/${post.postid}`);
+        onClickHandler(`/detail/${post_id}`);
       }}
     >
       <Image src="http://designwith.co.kr/wp-content/uploads/2021/03/1-6.png" />

@@ -4,7 +4,7 @@ const RESP = {
   // for user realted APIs
   LOGIN_HEADER: {
     Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsYXN0bWFuIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjYwMzc0NzYwfQ.md7GkryurbgmfFIjaJtvQEoOm6HqQWCCVrK2FzSqUMc",
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhYWEiLCJhdXRoIjoiUk9MRV9NRU1CRVIiLCJleHAiOjE2NjA3Mzc5NjF9.GWne8LvzFYiEqTmU6bS0NJ1E8GWQuQxeerOMVNV2FiU",
     RefreshToken:
       "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NjA5Nzc3NjB9.sLdXvDFyE_YFyUr_rkX9LBPJSFWnyGQv39p0tkE2xD0",
   },
@@ -101,9 +101,26 @@ const RESP = {
     },
   },
 
-  // for post realted APIs
+  // POST APIS
+  ADD_POST_SUCCESS: {
+    result: true,
+    message: "작성이 완료되었습니다.",
+  },
 
-  // for comment realted APIs
+  ADD_POST_FAIL: {
+    result: false,
+    error: { code: 500, message: "요청이 실패했습니다." },
+  },
+
+  UPDATE_POST_SUCCESS: {
+    result: true,
+    message: "수정이 완료되었습니다.",
+  },
+
+  UPDATE_POST_FAIL: {
+    result: false,
+    error: { code: 500, message: "요청이 실패했습니다." },
+  },
 };
 
 export default RESP;
