@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const URI = {
-  BASE: process.env.REACT_APP_BASE_URI,
+  BASE: process.env.REACT_APP_COMMENT_URI,
 };
 
 // 댓글 리스트 가져오기
@@ -26,14 +26,13 @@ export const __getCommentsList = createAsyncThunk(
 );
 
 // 댓글 작성
-// /api/auth/post/{postId}/comment
 export const __addComment = createAsyncThunk(
   "ADD_COMMENT",
   async (arg, thunkAPI) => {
     try {
       const { data } = await axios({
         method: "post",
-        url: `http://localhost:5002/add_comments`,
+        url: `${URI.BASE}/api/comment`,
         data: arg,
       });
       return thunkAPI.fulfillWithValue(data);
@@ -49,7 +48,6 @@ export const __deleteComment = createAsyncThunk(
   "DELETE_COMMENT",
   async (arg, thunkAPI) => {
     try {
-      console.log(arg);
       await axios({
         method: "delete",
         url: `http://localhost:5002/add_comments/${arg}`,

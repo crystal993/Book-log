@@ -1,6 +1,7 @@
 export const lightTheme = {
   // background
   backgroundColor: "#FFFFFF",
+  whiteColor: "#FFFFFF",
 
   // main
   mainColor: "#5D5FEF",

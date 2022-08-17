@@ -36,7 +36,7 @@ const Logo = styled.h1`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 50px;
+  margin-top: 100px;
   cursor: pointer;
 `;
 
