@@ -22,9 +22,15 @@ function AddForm({ post }) {
 
   // const postId = post?.postid;
 
-  const onSubmitHandler = (data, e) => {
+  const onSubmitHandler = (formData, e) => {
     e.preventDefault();
-    dispatch(__addComment({ nickname: post.nickname, comment: data.comment }));
+    dispatch(
+      __addComment({
+        postId: id,
+        nickname: post.nickname,
+        comment: formData.comment,
+      })
+    );
     reset();
   };
 
