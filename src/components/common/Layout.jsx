@@ -6,6 +6,7 @@ function Layout(props) {
 }
 
 const Layouts = styled.div`
+  background-color: #ffffff;
   width: 100%;
   min-width: 800px;
   margin: 0 auto;

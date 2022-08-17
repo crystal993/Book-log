@@ -5,21 +5,20 @@ import App from "./App";
 import { lightTheme } from "./styles/Theme";
 import { ThemeProvider } from "styled-components";
 import "./styles/fonts.css";
-// import { Provider } from "react";
+import { Provider } from "react-redux";
 import store from "./redux/store";
 //라우팅
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  // <Provider store={store}>
   <ThemeProvider theme={lightTheme}>
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>
   </ThemeProvider>
-  // </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
