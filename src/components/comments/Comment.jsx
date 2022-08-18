@@ -6,9 +6,11 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Button from "../common/Button";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  __getCommentsList,
   __updateComment,
   __deleteComment,
 } from "../../redux/modules/commentSlice";
+import axios from "axios";
 
 // TODO 로그인 여부, 작성자에 따라서 접근권한 부여
 // isLogin = false
@@ -18,30 +20,37 @@ import {
 // isLogin = true, 작성자가 일치할 때
 // 댓글 수정, 삭제 가능
 function Comment({ comment, post }) {
+  console.log(comment.content);
+  const isLogin = useSelector((state) => state.user.isLogin);
   const dispatch = useDispatch();
   const commentList = useSelector((state) => state.comment.commentList);
 
   const { id } = useParams(); //postId - axios요청시에 필요함.
+  const post_id = id;
   const [isEdit, setEdit] = useState(false);
-  const [updateComment, setUpdateComment] = useState(comment.comment);
-
+  const [updateComment, setUpdateComment] = useState(comment.conetent);
+  console.log(updateComment);
   const isEditHandler = (isEdit) => {
     setEdit(!isEdit);
   };
 
   // const postId = post?.postId;
-  const commentId = comment.id;
+  const commentId = comment.commentId;
 
+  // nickname: post.nickname,
   const onUpdateHandler = (e) => {
-    dispatch(
-      __updateComment({
-        id: commentId,
-        nickname: post.nickname,
-        comment: updateComment,
-      })
-    );
-    setUpdateComment(updateComment);
-    setEdit(!isEdit);
+    const { data } = axios({
+      method: "put",
+      url: `http://3.39.229.105/api/auth/post/${post_id}/${commentId}`,
+      data: {
+        content: updateComment,
+      },
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+        RefreshToken: localStorage.getItem("refreshToken"),
+      },
+    });
+    setEdit(false);
   };
 
   const onDeleteHandler = () => {
@@ -49,22 +58,26 @@ function Comment({ comment, post }) {
     const result = window.confirm("삭제하시겠습니까?");
     if (result) {
       console.log(parseInt(commentId));
-      dispatch(__deleteComment(commentId));
+      dispatch(__deleteComment({ commentId: commentId, postId: post_id }));
     } else {
       return;
     }
   };
 
-  useEffect(() => {
-    setUpdateComment(updateComment);
-  }, [setUpdateComment]);
+  // useEffect(() => {
+  //   setUpdateComment(updateComment);
+  // }, [setUpdateComment]);
 
   return (
     <>
       <CommentView>
         <CommentHeader>
           <CommentUserProfile>
-            <User icon={faUser} />
+            {isLogin ? (
+              <User icon={faUser} />
+            ) : (
+              <Image alt="profileImg" src={comment.imageUrl} />
+            )}
             <Writer> {comment.nickname}</Writer>
           </CommentUserProfile>
           <CommentButtons>
@@ -107,7 +120,7 @@ function Comment({ comment, post }) {
           </>
         ) : (
           <>
-            <CommentContent>{comment.comment}</CommentContent>
+            <CommentContent>{comment.content}</CommentContent>
             <Hr noshade />
           </>
         )}
@@ -166,6 +179,12 @@ const User = styled(FontAwesomeIcon)`
   font-size: 20px;
   background-color: #747477;
   border: 1px solid #747477;
+  border-radius: 50px;
+  padding: 10px;
+`;
+
+const Image = styled.img`
+  width: 50px;
   border-radius: 50px;
   padding: 10px;
 `;

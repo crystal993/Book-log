@@ -28,7 +28,7 @@ function LoginForm() {
   });
 
   const URI = {
-    BASE: process.env.REACT_APP_USER_URI,
+    BASE: process.env.REACT_APP_BASE_URI,
   };
 
   // redirect authenticated user to profile screen
@@ -43,25 +43,26 @@ function LoginForm() {
     // const { result, status: { message } } = await axios.post(`http://localhost:3000/user/login`, formData);
     const response = await axios({
       method: "post",
-      url: `http://52.78.227.187/api/user/login`,
+      url: `http://3.39.229.105/api/user/login`,
       data: formData,
     });
-    // TODO data찍어보고, AccessToken, RefreshToken 잘 분리해보기
-    console.log(response);
-
+    console.log(response.headers.authorization);
+    console.log(response.headers);
     //
     //
     // const {
     //   result,
     //   status: { message },
     // } = RESP.LOGIN_SUCCESS;
-    const { Authorization, RefreshToken } = response.data;
+    const { authorization, refreshtoken } = response.headers;
     // if (!result) {
     //   alert(message);
     //   return;
     // }
-    localStorage.setItem("AccessToken", Authorization);
-    localStorage.setItem("RefreshToken", RefreshToken);
+    const { data, result } = response.data;
+    localStorage.setItem("userInfo", data);
+    localStorage.setItem("accessToken", authorization);
+    localStorage.setItem("refreshToken", refreshtoken);
     // dispatch(login());
     navigate("/");
   };

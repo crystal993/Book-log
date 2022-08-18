@@ -5,14 +5,21 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import Button from "../common/NavButton";
 
-const AddForm2 = () => {
+const AddForm = () => {
   const { id } = useParams();
   const post_id = id;
+
+  // ${URI.BASE}
+  const URI = {
+    BASE: process.env.REACT_APP_BASE_URI,
+  };
+
   const {
     register,
     handleSubmit,
     setFocus,
     reset,
+    watch,
     formState: { isDirty, errors },
   } = useForm({
     mode: "onChange",
@@ -28,47 +35,36 @@ const AddForm2 = () => {
     content: "",
   });
 
-  // onChange 이벤트가 발생한 target을 받아와 value값을 할당해준다.
-  const onChangeHandler = (e) => {
-    const { value, name } = e.target;
-    setBookInfo({ ...bookInfo, [name]: value });
-  };
-
   // 취소 버튼 디테일로
   const navigate = useNavigate();
-  const onClickBack = () => {
-    navigate(`/detail/${post_id}`);
-  };
+
+  const file = watch("imageUrl");
 
   //::등록 기능
-  const onUpdateHandler = async (formData, e) => {
+  const onSubmitHandler = async (formData, e) => {
+    const fd = new FormData();
+    fd.append("category", formData.category);
+    fd.append("bookTitle", formData.bookTitle);
+    fd.append("author", formData.author);
+    fd.append("title", formData.title);
+    fd.append("content", formData.content);
+    fd.append("imageUrl", file[0]);
     if (formData.title !== "" || formData.content !== "") {
-      const newPost = {
-        title: formData.title,
-        bookTitle: formData.bookTitle,
-        author: formData.author,
-        category: formData.category,
-        content: formData.content,
-      };
-      console.log(formData);
-      // `${URI.BASE}/api/user/login`
-      //   const { data } = await axios({
-      //     method: "put",
-      //     url: `http://localhost:3000/add_posts/${postId}`,
-      //     data: newPost,
-      //   });
-      //   setBookInfo({
-      //     category: "",
-      //     bookCoverFile: "",
-      //     bookTitle: "",
-      //     author: "",
-      //     title: "",
-      //     content: "",
-      //   });
-      // } else {
-      //   console.log("내용을 입력해주세요");
-      // }
+      //  `${URI.BASE}/api/user/login`
+      const { data } = await axios({
+        method: "post",
+        url: `http://3.39.229.105/api/auth/post`,
+        data: fd,
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          RefreshToken: localStorage.getItem("refreshtoken"),
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } else {
+      console.log("내용을 입력해주세요");
     }
+    //TODO 페이지네이션 넣기
   };
 
   useEffect(() => {
@@ -78,8 +74,8 @@ const AddForm2 = () => {
 
   return (
     <UpdateView>
-      <Form onSubmit={handleSubmit(onUpdateHandler)}>
-        <Title>게시글 작성</Title>
+      <Form onSubmit={handleSubmit(onSubmitHandler)}>
+        <Title>OO님의 Book Log</Title>
         <Container>
           <Label>카테고리</Label>
           <InputBox>
@@ -95,9 +91,7 @@ const AddForm2 = () => {
               <option value="외국어">외국어</option>
             </Select>
           </InputBox>
-          <ButtonBox>
-            <MsgBox></MsgBox>
-          </ButtonBox>
+          <MsgBox></MsgBox>
           <Label>도서명</Label>
           <InputBox>
             <Input
@@ -109,13 +103,11 @@ const AddForm2 = () => {
               })}
             />
           </InputBox>
-          <ButtonBox>
-            <MsgBox>
-              {errors.bookTitle && (
-                <ErrorMsg>{errors.bookTitle.message}</ErrorMsg>
-              )}
-            </MsgBox>
-          </ButtonBox>
+          <MsgBox>
+            {errors.bookTitle && (
+              <ErrorMsg>{errors.bookTitle.message}</ErrorMsg>
+            )}
+          </MsgBox>
           <Label>저자</Label>
           <InputBox>
             <Input
@@ -126,11 +118,9 @@ const AddForm2 = () => {
               })}
             />
           </InputBox>
-          <ButtonBox>
-            <MsgBox>
-              {errors.author && <ErrorMsg>{errors.author.message}</ErrorMsg>}
-            </MsgBox>
-          </ButtonBox>
+          <MsgBox>
+            {errors.author && <ErrorMsg>{errors.author.message}</ErrorMsg>}
+          </MsgBox>
           <Label>제목</Label>
           <InputBox>
             <Input
@@ -141,39 +131,48 @@ const AddForm2 = () => {
               })}
             />
           </InputBox>
-          <ButtonBox>
-            <MsgBox>
-              {errors.title && <ErrorMsg>{errors.title.message}</ErrorMsg>}
-            </MsgBox>
-          </ButtonBox>
+          <MsgBox>
+            {errors.title && <ErrorMsg>{errors.title.message}</ErrorMsg>}
+          </MsgBox>
           <Label>감상평</Label>
           <InputBox>
             <TextArea
               type="textarea"
-              multiline={true}
               textAlign="top"
               placeholder={"감상평을 입력해 주세요."}
               name="content"
-              value={bookInfo.content}
-              onChange={onChangeHandler}
+              {...register("content")}
             />
           </InputBox>
-          <ButtonBox>
-            <MsgBox>
-              {errors.imageUrl && (
-                <ErrorMsg>{errors.imageUrl.message}</ErrorMsg>
-              )}
-            </MsgBox>
-          </ButtonBox>
+          <Label>BOOK IMG</Label>
+          <InputBox>
+            <Input
+              type="file"
+              accept="image/*"
+              placeholder="이미지 파일"
+              {...register("imageUrl", {})}
+            />
+          </InputBox>
+          <MsgBox>
+            {errors.imageUrl && <ErrorMsg>{errors.imageUrl.message}</ErrorMsg>}
+          </MsgBox>
         </Container>
-        <Button content={"게시글 수정"} type="submit" />
+        <ButtonBox>
+          <Button content={"게시글 등록"} type="submit" />
+          <Button
+            content={"이전"}
+            onClick={() => {
+              navigate(`/detail/${post_id}`);
+            }}
+          />
+        </ButtonBox>
       </Form>
       {/* {openModal && <Modal msg={msg} />} */}
     </UpdateView>
   );
 };
 
-export default AddForm2;
+export default AddForm;
 
 const UpdateView = styled.div`
   width: 60%;
@@ -275,7 +274,7 @@ const ButtonBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
   margin-right: -20px;
 `;

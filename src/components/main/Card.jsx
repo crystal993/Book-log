@@ -9,7 +9,7 @@ function Card({ post }) {
   const onClickHandler = (path) => {
     navigate(path);
   };
-  const post_id = post.postid;
+  const post_id = post.postId;
   return (
     <CardView
       onClick={() => {

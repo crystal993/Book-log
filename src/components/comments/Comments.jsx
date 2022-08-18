@@ -5,18 +5,34 @@ import Comment from "./Comment";
 import { useSelector, useDispatch } from "react-redux";
 import { __getCommentsList } from "../../redux/modules/commentSlice";
 import Pagination from "./Pagination";
+import { useParams } from "react-router-dom";
 
 function Comments({ post }) {
+  const { id } = useParams();
+  const postId = id;
   const dispatch = useDispatch();
-  const commentList = useSelector((state) => state.comment.commentList);
-
+  const [commentList, setCommentList] = useState([]);
+  // const commentList = useSelector((state) => state.comment.commentList);
+  console.log(commentList);
+  // console.log(post);
   //페이지네이션
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
 
   useEffect(() => {
-    dispatch(__getCommentsList());
+    const { data } = axios({
+      method: "get",
+      url: `http://3.39.229.105/api/post/${postId}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("AccessToken"),
+        RefreshToken: localStorage.getItem("RefreshToken"),
+      },
+    }).then((res) => {
+      setCommentList(res.data.data.commentResponseDtoList);
+    });
+    console.log(data);
   }, []);
 
   // TODO post는 Detail페이지 불러올 때라 바뀔 수도 있음.
@@ -25,7 +41,7 @@ function Comments({ post }) {
       <Container>
         {commentList.slice(offset, offset + limit).map((comment) => {
           return (
-            <Fragment key={comment.id}>
+            <Fragment key={comment.commentId}>
               <Comment comment={comment} post={post} />
             </Fragment>
           );

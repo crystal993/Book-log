@@ -29,9 +29,11 @@ function SignUpForm() {
     mode: "onChange",
   });
 
+  // ${URI.BASE}
   const URI = {
     BASE: process.env.REACT_APP_BASE_URI,
   };
+  console.log(URI.BASE);
 
   const inputRef = useRef(null);
   const onChangeImg = async (e) => {
@@ -88,7 +90,7 @@ function SignUpForm() {
     fd.append("imageUrl", file[0]);
     const { data } = await axios({
       method: "post",
-      url: `http://15.164.218.57/api/user/signup`,
+      url: `http://3.39.229.105/api/user/signup`,
       data: fd,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -99,39 +101,39 @@ function SignUpForm() {
     navigate("/");
   };
 
+  // http://3.39.229.105
   const onIdCheckHandler = async (formData) => {
-    // const { data } = await axios({
-    //   method: "get",
-    //   url: `${URI.BASE}/api/user/idCheck/${formData.account}`,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
+    const { data } = await axios({
+      method: "get",
+      url: `http://3.39.229.105/api/user/idCheck/${formData.account}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-    const result = RESP.ID_CHECK_SUCCESS.result;
-    if (result) {
-      setMsg("사용가능한 아이디 입니다.");
+    if (data) {
+      alert("사용가능한 아이디 입니다.");
     } else {
-      setMsg("존재하는 아이디 입니다.");
+      alert("존재하는 아이디 입니다.");
     }
-    return result;
+    return data;
   };
 
   const onNickCheckHandler = async (formData, e) => {
-    // const { data } = await axios({
-    //   method: "get",
-    //   url: `${URI.BASE}/api/user/nicnameCheck/${formData.nickname}`,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-    const result = RESP.NICKNAME_CHECK_SUCCESS.result;
-    if (result) {
-      setMsg("사용가능한 닉네임 입니다.");
+    const { data } = await axios({
+      method: "get",
+      url: `${URI.BASE}/api/user/nicnameCheck/${formData.nickname}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (data) {
+      alert("사용가능한 닉네임 입니다.");
     } else {
-      setMsg("존재하는 닉네임 입니다.");
+      alert("존재하는 닉네임 입니다.");
     }
-    return result;
+    return data;
   };
 
   // useEffect(() => {

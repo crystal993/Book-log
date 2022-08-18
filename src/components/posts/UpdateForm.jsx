@@ -14,6 +14,7 @@ const UpdateForm = () => {
     handleSubmit,
     setFocus,
     reset,
+    watch,
     setValue,
     formState: { isDirty, errors },
   } = useForm({
@@ -36,24 +37,35 @@ const UpdateForm = () => {
     setBookInfo({ ...bookInfo, [name]: value });
   };
 
-  // 취소 버튼 디테일로
   const navigate = useNavigate();
 
+  const file = watch("imageUrl");
+
+  // ${URI.BASE}
+  const URI = {
+    BASE: process.env.REACT_APP_BASE_URI,
+  };
+
   //::등록 기능
+  //TODO 게시글 수정 서버랑 연결 확인해야함.
   const onUpdateHandler = async (formData, e) => {
+    const fd = new FormData();
+    fd.append("category", formData.category);
+    fd.append("bookTitle", formData.bookTitle);
+    fd.append("author", formData.author);
+    fd.append("title", formData.title);
+    fd.append("content", formData.content);
+    fd.append("imageUrl", file[0]);
     if (formData.title !== "" || formData.content !== "") {
       const { data } = await axios({
         method: "put",
         url: `http://3.39.229.105/api/auth/post/${post_id}`,
-        data: formData,
-      });
-      setBookInfo({
-        category: "",
-        bookCoverFile: "",
-        bookTitle: "",
-        author: "",
-        title: "",
-        content: "",
+        data: fd,
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          RefreshToken: localStorage.getItem("refreshtoken"),
+          "Content-Type": "multipart/form-data",
+        },
       });
     } else {
       console.log("내용을 입력해주세요");
@@ -75,7 +87,7 @@ const UpdateForm = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:5002/detail_comment_list`,
+      url: `http://3.39.229.105/api/post/${post_id}`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -83,12 +95,12 @@ const UpdateForm = () => {
       .then((response) => {
         // TODO 데이터 서버에서 어떻게 내려주냐에 따라서 또 달라질듯
         console.log(response);
-        setValue("category", response.data[0].category);
-        setValue("bookTitle", response.data[0].bookTitle);
-        setValue("author", response.data[0].author);
-        setValue("title", response.data[0].title);
-        setValue("content", response.data[0].content);
-        setPost(response.data[0]);
+        setValue("category", response.data.data.category);
+        setValue("bookTitle", response.data.data.bookTitle);
+        setValue("author", response.data.data.author);
+        setValue("title", response.data.data.title);
+        setValue("content", response.data.data.content);
+        setPost(response.data.data);
       })
       .catch((err) => {});
     // setUser(response.data);
@@ -100,7 +112,7 @@ const UpdateForm = () => {
   return (
     <UpdateView>
       <Form onSubmit={handleSubmit(onUpdateHandler)}>
-        <Title>게시글 업데이트</Title>
+        <Title>{post?.nickname}님의 Book Log</Title>
         <Container>
           <Label>카테고리</Label>
           <InputBox>
@@ -167,12 +179,17 @@ const UpdateForm = () => {
               textAlign="top"
               placeholder={"감상평을 입력해 주세요."}
               name="content"
-              value={bookInfo.content}
-              onChange={onChangeHandler}
               {...register("content")}
             />
           </InputBox>
-
+          <InputBox>
+            <Input
+              type="file"
+              accept="image/*"
+              placeholder="이미지 파일"
+              {...register("imageUrl", {})}
+            />
+          </InputBox>
           <MsgBox>
             {errors.imageUrl && <ErrorMsg>{errors.imageUrl.message}</ErrorMsg>}
           </MsgBox>

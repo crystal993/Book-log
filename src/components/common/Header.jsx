@@ -5,6 +5,7 @@ import { faHome } from "@fortawesome/free-solid-svg-icons";
 import styled, { CSSprop } from "styled-components";
 import Button from "./NavButton";
 import { logout } from "../../redux/modules/userSlice";
+import axios from "axios";
 
 function Header(color) {
   const dispatch = useDispatch();
@@ -15,11 +16,25 @@ function Header(color) {
     navigate(path);
   };
 
-  const logoutHandler = () => {
-    console.log("로그아웃!");
+  // ${URI.BASE}
+  const URI = {
+    BASE: process.env.REACT_APP_BASE_URI,
+  };
+
+  const logoutHandler = async () => {
+    const { data } = await axios.get(`http://3.39.229.105/api/user/logout`, {
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+        RefreshToken: localStorage.getItem("refreshToken"),
+      },
+    });
+
+    if (data) {
+      console.log("로그아웃!");
+    }
     dispatch(logout());
-    localStorage.removeItem("AccessToken");
-    localStorage.removeItem("RefreshToken");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
   };
 
   return (

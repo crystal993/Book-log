@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// ${URI.BASE}
 const URI = {
-  BASE: process.env.REACT_APP_COMMENT_URI,
+  BASE: process.env.REACT_APP_BASE_URI,
 };
 
 // 댓글 리스트 가져오기
@@ -11,14 +12,21 @@ export const __getCommentsList = createAsyncThunk(
   "GET_COMMENTS_LIST",
   async (arg, thunkAPI) => {
     try {
+      let comment_list = [];
       const { data } = await axios({
         method: "get",
-        url: `http://localhost:5002/detail_comment_list`,
+        url: `http://3.39.229.105/api/post/${arg.postId}`,
         headers: {
           "Content-Type": "application/json",
         },
+      }).then((res) => {
+        // TODO 데이터 서버에서 어떻게 내려주냐에 따라서 또 달라질듯
+        console.log(res);
+        comment_list = res.data.data.commentResponseDtoLis;
+        // setCommentList(res.data.data.commentResponseDtoList);
       });
-      return thunkAPI.fulfillWithValue(data[0].commentResponseDtoList);
+      // console.log(res.data); // data.data.commentResponseDtoList
+      return thunkAPI.fulfillWithValue(comment_list);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.code);
     }
@@ -32,8 +40,14 @@ export const __addComment = createAsyncThunk(
     try {
       const { data } = await axios({
         method: "post",
-        url: `${URI.BASE}/api/comment`,
-        data: arg,
+        url: `http://3.39.229.105/api/auth/post/${arg.postId}/comment`,
+        data: {
+          content: arg.comment,
+        },
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          RefreshToken: localStorage.getItem("refreshToken"),
+        },
       });
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
@@ -50,7 +64,11 @@ export const __deleteComment = createAsyncThunk(
     try {
       await axios({
         method: "delete",
-        url: `http://localhost:5002/add_comments/${arg}`,
+        url: `${URI.BASE}/api/auth/post/${arg.postId}/${arg.commentId}`,
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          RefreshToken: localStorage.getItem("refreshToken"),
+        },
       });
       return thunkAPI.fulfillWithValue(arg);
     } catch (e) {
@@ -65,11 +83,20 @@ export const __updateComment = createAsyncThunk(
   "UPDATE_COMMENT",
   async (arg, thunkAPI) => {
     try {
-      axios({
+      // TODO data 형식이 맞는지 백엔드분들과 협의
+      const { data } = axios({
         method: "put",
-        url: `http://localhost:5002/add_comments/${arg.id}`,
-        data: arg,
+        url: `http://3.39.229.105/api/auth/post/${arg.postId}/${arg.commentId}`,
+        data: {
+          content: arg.comment,
+        },
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          RefreshToken: localStorage.getItem("refreshToken"),
+        },
       });
+      // 콘솔에 찍어보기
+      console.log(data);
       return thunkAPI.fulfillWithValue(arg);
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
@@ -94,7 +121,7 @@ export const commentSlice = createSlice({
     },
     [__getCommentsList.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.commentList = [...state.commentList, ...action.payload];
+      state.commentList = action.payload;
     },
     [__getCommentsList.rejected]: (state, action) => {
       state.isLoading = false;

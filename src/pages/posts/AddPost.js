@@ -1,10 +1,12 @@
 import React from "react";
-import AddForm from "../../components/posts/AddForm2";
-import Layout from "../../components/layout/SignUpLayout";
+import AddForm from "../../components/posts/AddForm";
+import Layout from "../../components/common/Layout";
+import Header from "../../components/common/Header";
 
 function AddPost() {
   return (
     <Layout>
+      <Header></Header>
       <AddForm></AddForm>
     </Layout>
   );

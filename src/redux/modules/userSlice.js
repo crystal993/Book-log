@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import RESP from "../../server/response";
 const initialState = {
-  isLogin: localStorage.getItem("userToken") ? true : false,
+  isLogin: localStorage.getItem("accessToken") ? true : false,
 };
 
 const userSlice = createSlice({

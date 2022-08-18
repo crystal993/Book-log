@@ -2,25 +2,19 @@
 
 const RESP = {
   // for user realted APIs
-  LOGIN_HEADER: {
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWFhYWEiLCJhdXRoIjoiUk9MRV9NRU1CRVIiLCJleHAiOjE2NjA3Mzc5NjF9.GWne8LvzFYiEqTmU6bS0NJ1E8GWQuQxeerOMVNV2FiU",
-    RefreshToken:
-      "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NjA5Nzc3NjB9.sLdXvDFyE_YFyUr_rkX9LBPJSFWnyGQv39p0tkE2xD0",
-  },
   LOGIN_SUCCESS: {
     result: true,
     data: {
-      id: 1,
-      username: "crystal",
-      nickname: "helllo_world",
-      createdAt: "2022-08-15T15:42:37.493339",
-      modifiedAt: "2022-08-15T15:42:37.493339",
+      account: "zintest1",
+      nickname: "nickname",
+      accessToken:
+        "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6aW50ZXN0MSIsImF1dGgiOiJST0xFX01FTUJFUiIsImV4cCI6MTY2MDczNjQ0Nn0.xlE8yYp6tCms0aBfAe7DG0O4-GL5IlaaEozJBucKRto",
+      refreshToken:
+        "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NjEzMzk0NDZ9.NkkZ2heZ8pTyuvVRwqf7j4ktBV4_TFuhU9DLb8W_kiU",
+      imageUrl: "Server-pang-1660734640405.jpg",
     },
-    status: {
-      code: 200,
-      message: "successfullly logged in.",
-    },
+    message: null,
+    error: null,
   },
   LOGIN_FAIL: {
     result: false,
