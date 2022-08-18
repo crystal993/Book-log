@@ -27,7 +27,6 @@ function AddForm({ post }) {
     dispatch(
       __addComment({
         postId: id,
-        nickname: post.nickname,
         comment: formData.comment,
       })
     );
